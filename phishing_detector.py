@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, f1_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
+import joblib
 
 # Load Kaggle dataset
 df = pd.read_csv("data/Website Phishing.csv")
@@ -66,6 +67,9 @@ svm_pred = svm_model.predict(X_test)
 print("\n===== Support Vector Machine =====")
 print("Accuracy:", accuracy_score(y_test, svm_pred))
 print(classification_report(y_test, svm_pred))
+
+# Save trained SVM model
+joblib.dump(svm_model, "phishing_model.pkl")
 
 # Best model
 best_rf = grid_search.best_estimator_
