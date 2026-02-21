@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, f1_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVC
 
 # Load Kaggle dataset
 df = pd.read_csv("data/Website Phishing.csv")
@@ -55,6 +56,17 @@ grid_search = GridSearchCV(
 
 grid_search.fit(X_train, y_train)
 
+# ---------------- Support Vector Machine ----------------
+
+svm_model = SVC(kernel='rbf', C=1.0)
+svm_model.fit(X_train, y_train)
+
+svm_pred = svm_model.predict(X_test)
+
+print("\n===== Support Vector Machine =====")
+print("Accuracy:", accuracy_score(y_test, svm_pred))
+print(classification_report(y_test, svm_pred))
+
 # Best model
 best_rf = grid_search.best_estimator_
 
@@ -72,7 +84,8 @@ print(classification_report(y_test, rf_pred))
 
 models = {
     "Logistic Regression": log_pred,
-    "Random Forest": rf_pred
+    "Random Forest (Tuned)": rf_pred,
+    "SVM": svm_pred
 }
 
 print("\n========== Model Comparison Summary ==========\n")
