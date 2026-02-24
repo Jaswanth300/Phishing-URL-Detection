@@ -5,8 +5,11 @@ import numpy as np
 app = Flask(__name__)
 
 # Load trained model
-model = joblib.load("phishing_model.pkl")
-
+try:
+    model = joblib.load("phishing_model.pkl")
+except Exception as e:
+    model = None
+    print("Error loading model:", e)
 # Feature names in correct order
 feature_names = [
     "SFH",
@@ -27,6 +30,8 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
    data = request.json
+if model is None:
+    return jsonify({"error": "Model not loaded properly"}), 500
 
 # Validate input
 if not data:
