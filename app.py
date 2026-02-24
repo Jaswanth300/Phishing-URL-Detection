@@ -20,7 +20,7 @@ feature_names = [
     "having_IP_Address"
 ]
 
-@app.route("/")
+@app.route("/health")
 def home():
     return "Phishing Detection API is running 🚀"
 
