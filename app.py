@@ -26,19 +26,22 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    data = request.json
-    
+   data = request.json
+
+# Validate input
+if not data:
+    return jsonify({"error": "No input data provided"}), 400
+
+missing_features = [f for f in feature_names if f not in data]
+if missing_features:
+    return jsonify({"error": f"Missing features: {missing_features}"}), 400
+
+try:
     features = [data[feature] for feature in feature_names]
     features_array = np.array([features])
-    
     prediction = model.predict(features_array)[0]
-    
-    result = "Phishing Website" if prediction == 1 else "Legitimate Website"
-    
-    return jsonify({
-        "prediction": int(prediction),
-        "result": result
-    })
+except Exception as e:
+    return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
    app.run(host="0.0.0.0", port=5000)
